@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sudoku/screens/login.dart';
 import 'src/main_menu.dart';
 
 // Start App
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context)  {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-    home: MainWindow(),
+    home: Login(),
     );
   }
 
