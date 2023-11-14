@@ -19,9 +19,9 @@ class MainMenu extends StatelessWidget {
             child: ListView(
           children: [
             loginImage(_loginImagePath),
-            button('New Game', context, 'GameDifficulty'),
-            button('Settings', context, 'Settings'),
-            button('Quit', context, ''),
+            buttonPushNamed('New Game', context, 'GameDifficulty'),
+            buttonPushNamed('Settings', context, 'Settings'),
+            buttonPushNamed('Quit', context, ''),
           ],
         )),
       ),

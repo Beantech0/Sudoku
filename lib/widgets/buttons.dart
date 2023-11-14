@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
-Widget button(String buttonText, context, String navigateTo) {
+Widget buttonPushNamed(String buttonText, context, String navigateTo) {
   return Padding(
     padding: const EdgeInsets.all(10),
     child: ElevatedButton(
@@ -9,6 +11,26 @@ Widget button(String buttonText, context, String navigateTo) {
       ),
       onPressed: () {
         Navigator.pushNamed(context, navigateTo);
+      },
+      child: Text(
+        buttonText,
+        style: const TextStyle(
+          fontSize: 18,
+        ),
+      ),
+    ),
+  );
+}
+
+Widget buttonQuit(String buttonText, context) {
+  return Padding(
+    padding: const EdgeInsets.all(10),
+    child: ElevatedButton(
+      style: const ButtonStyle(
+        backgroundColor: MaterialStatePropertyAll<Color>(Colors.teal),
+      ),
+      onPressed: () {
+        exit(0);
       },
       child: Text(
         buttonText,

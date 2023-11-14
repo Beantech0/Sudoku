@@ -22,9 +22,9 @@ class WelcomeScreen extends StatelessWidget {
           children: [
             loginImage(_loginImagePath),
             inputTextField('Login'),
-            button('Login', context, 'Login'),
-            button('Play without Login', context, 'MainMenu'),
-            button('Quit', context, ''),
+            buttonPushNamed('Login', context, 'Login'),
+            buttonPushNamed('Play without Login', context, 'MainMenu'),
+            buttonQuit('Quit', context),
           ],
         )),
       ),

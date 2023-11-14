@@ -19,9 +19,9 @@ class GameDifficulty extends StatelessWidget {
             child: ListView(
           children: [
             loginImage(_loginImagePath),
-            button('Easy', context, 'GameTable'),
-            button('Medium', context, 'GameTable'),
-            button('Hard', context, 'GameTable'),
+            buttonPushNamed('Easy', context, 'GameTable'),
+            buttonPushNamed('Medium', context, 'GameTable'),
+            buttonPushNamed('Hard', context, 'GameTable'),
           ],
         )),
       ),
