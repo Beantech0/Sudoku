@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:sudoku/widgets/buttons.dart';
 import 'package:sudoku/widgets/images.dart';
 
-class MainMenu extends StatelessWidget {
+class GameDifficulty extends StatelessWidget {
   final String _loginImagePath = 'images/sudoku_logo_transparent.png';
-  const MainMenu({super.key});
+  const GameDifficulty({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +19,9 @@ class MainMenu extends StatelessWidget {
             child: ListView(
           children: [
             loginImage(_loginImagePath),
-            button('New Game', context, 'GameDifficulty'),
-            button('Settings', context, 'Settings'),
-            button('Quit', context, ''),
+            button('Easy', context, 'GameTable'),
+            button('Medium', context, 'GameTable'),
+            button('Hard', context, 'GameTable'),
           ],
         )),
       ),
