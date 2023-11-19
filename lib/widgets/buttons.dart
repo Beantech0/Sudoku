@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 Widget buttonPushNamed(String buttonText, context, String navigateTo) {
@@ -10,7 +9,7 @@ Widget buttonPushNamed(String buttonText, context, String navigateTo) {
         backgroundColor: MaterialStatePropertyAll<Color>(Colors.teal),
       ),
       onPressed: () {
-        Navigator.pushNamed(context, navigateTo);
+        Navigator.pushNamed(context, navigateTo, arguments: buttonText);
       },
       child: Text(
         buttonText,

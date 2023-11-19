@@ -21,9 +21,9 @@ class WelcomeScreen extends StatelessWidget {
             child: ListView(
           children: [
             loginImage(_loginImagePath),
-            inputTextField('Login'),
-            buttonPushNamed('Login', context, 'Login'),
-            buttonPushNamed('Play without Login', context, 'MainMenu'),
+            inputTextField('/Login'),
+            buttonPushNamed('Login', context, '/Login'),
+            buttonPushNamed('Play without Login', context, '/MainMenu'),
             buttonQuit('Quit', context),
           ],
         )),
