@@ -3,7 +3,8 @@ import 'package:sudoku/widgets/buttons.dart';
 import 'package:sudoku/widgets/images.dart';
 
 class MainMenu extends StatelessWidget {
-  final String _loginImagePath = 'images/sudoku_logo_transparent.png';
+  // final String _loginImagePath = 'images/sudoku_logo_transparent.png';
+      final String _loginImagePath = 'images/calculator-icon.png';
   const MainMenu({super.key});
 
   @override

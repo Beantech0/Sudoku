@@ -6,8 +6,8 @@ import 'package:sudoku/widgets/inputFields.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
-  final String _loginImagePath = 'images/sudoku_logo_transparent.png';
-
+  // final String _loginImagePath = 'images/sudoku_logo_transparent.png';
+  final String _loginImagePath = 'images/calculator-icon.png';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
