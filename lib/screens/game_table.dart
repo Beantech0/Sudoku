@@ -1,7 +1,10 @@
+// Sudoku tábla screen
+// StatefulWidget, minden változtatásnál újra buildeli a screent
+// Számok generálása a táblához => generateSudoku()
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:quiver/iterables.dart';
-import 'package:sudoku/screens/game_difficulty.dart';
 import 'package:sudoku/src/block_value.dart';
 import 'package:sudoku/src/focus.dart';
 import 'package:sudoku/src/inner_box.dart';
