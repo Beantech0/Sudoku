@@ -1,21 +1,21 @@
-import 'package:sudoku/blokChar.dart';
+import 'package:sudoku/src/block_value.dart';
 
-class BoxInner {
+class InnerBox {
   late int index;
-  List<BlokChar> blokChars = List<BlokChar>.from([]);
+  List<BlockValue> blockValues = List<BlockValue>.from([]);
 
-  BoxInner(this.index, this.blokChars);
+  InnerBox(this.index, this.blockValues);
 
   // declare method used
   setFocus(int index, Direction direction) {
-    List<BlokChar> temp;
+    List<BlockValue> temp;
 
     if (direction == Direction.Horizontal) {
-      temp = blokChars
+      temp = blockValues
           .where((element) => element.index! ~/ 3 == index ~/ 3)
           .toList();
     } else {
-      temp = blokChars
+      temp = blockValues
           .where((element) => element.index! % 3 == index % 3)
           .toList();
     }
@@ -27,25 +27,25 @@ class BoxInner {
 
   setExistValue(
       int index, int indexBox, String textInput, Direction direction) {
-    List<BlokChar> temp;
+    List<BlockValue> temp;
 
     if (direction == Direction.Horizontal) {
-      temp = blokChars
+      temp = blockValues
           .where((element) => element.index! ~/ 3 == index ~/ 3)
           .toList();
     } else {
-      temp = blokChars
+      temp = blockValues
           .where((element) => element.index! % 3 == index % 3)
           .toList();
     }
 
     if (this.index == indexBox) {
-      List<BlokChar> blokCharsBox =
-          blokChars.where((element) => element.text == textInput).toList();
+      List<BlockValue> blockValuesBox =
+          blockValues.where((element) => element.text == textInput).toList();
 
-      if (blokCharsBox.length == 1 && temp.isEmpty) blokCharsBox.clear();
+      if (blockValuesBox.length == 1 && temp.isEmpty) blockValuesBox.clear();
 
-      temp.addAll(blokCharsBox);
+      temp.addAll(blockValuesBox);
     }
 
     temp.where((element) => element.text == textInput).forEach((element) {
@@ -54,13 +54,13 @@ class BoxInner {
   }
 
   clearFocus() {
-    blokChars.forEach((element) {
+    blockValues.forEach((element) {
       element.isFocus = false;
     });
   }
 
   clearExist() {
-    blokChars.forEach((element) {
+    blockValues.forEach((element) {
       element.isExist = false;
     });
   }

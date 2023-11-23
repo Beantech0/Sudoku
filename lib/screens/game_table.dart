@@ -1,4 +1,11 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:quiver/iterables.dart';
+import 'package:sudoku/screens/game_difficulty.dart';
+import 'package:sudoku/src/block_value.dart';
+import 'package:sudoku/src/focus.dart';
+import 'package:sudoku/src/inner_box.dart';
+import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
 
 class GameTable extends StatefulWidget {
   const GameTable({super.key, required difficultyLevel});
@@ -8,14 +15,46 @@ class GameTable extends StatefulWidget {
 }
 
 class _GameTable extends State<GameTable> {
+  List<InnerBox> innerBoxes = [];
+  FocusClass focusClass = FocusClass();
+  bool isFinish = false;
+  String? tapBoxIndex;
+  
+  get emptyBlockNumber => null;
+
+  @override
+  void initState() {
+
+    generateSudoku();
+    super.initState();
+  }
+
+  void generateSudoku() {
+    isFinish = false;
+    focusClass = FocusClass();
+    tapBoxIndex = null;
+    generatePuzzle(emptyBlockNumber);
+    checkFinish();
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final difficultyLevel = ModalRoute.of(context)!.settings.arguments;
     String difficulty = difficultyLevel.toString();
 
+    Map difficultyList = {
+      5:  'Test',
+      18: 'Easy',
+      27: 'Medium',
+      36: 'Hard',
+    };
+    var emptyBlockNumber = difficultyList.keys.firstWhere((element) => difficultyList[element] == difficulty, orElse: () => 2);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('asd'),
+        title:  Text(emptyBlockNumber.toString()),
         backgroundColor: Colors.teal,
       ),
       body: SafeArea(
@@ -32,7 +71,7 @@ class _GameTable extends State<GameTable> {
                 width: double.maxFinite,
                 alignment: Alignment.center,
                 child: GridView.builder(
-                  itemCount: 9,
+                  itemCount: innerBoxes.length,
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
@@ -42,13 +81,14 @@ class _GameTable extends State<GameTable> {
                   ),
                   physics: const ScrollPhysics(),
                   itemBuilder: (buildContext, index) {
+                    InnerBox innerBox = innerBoxes[index];
                     return Container(
                       color: Colors.blue.shade100,
                       alignment: Alignment.center,
 
                       // Minden "kockán" belül lefut még 9x és az adott widgeten belül csinál 9 widgetet ugyanolyan elrendezésben
                       child: GridView.builder(
-                        itemCount: 9,
+                        itemCount: innerBox.blockValues.length,
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
@@ -58,12 +98,40 @@ class _GameTable extends State<GameTable> {
                           mainAxisSpacing: 2,
                         ),
                         physics: const ScrollPhysics(),
-                        itemBuilder: (buildContext, index) {
+                        itemBuilder: (buildContext, indexChar) {
+                          BlockValue blockValue =
+                              innerBox.blockValues[indexChar];
+                          Color color = Colors.yellow.shade100;
+                          Color colorText = Colors.black;
+
+                          // change color base condition
+
+                          if (isFinish)
+                            color = Colors.green;
+                          else if (blockValue.isFocus && blockValue.text != "")
+                            color = Colors.brown.shade100;
+                          else if (blockValue.isDefault)
+                            color = Colors.grey.shade400;
+
+                          if (tapBoxIndex == "${index}-${indexChar}" &&
+                              !isFinish) color = Colors.blue.shade100;
+
+                          if (this.isFinish)
+                            colorText = Colors.white;
+                          else if (blockValue.isExist) colorText = Colors.red;
+
                           return Container(
-                            margin: const EdgeInsets.all(3),
-                            color: Colors.yellow.shade100,
+                            color: color,
                             alignment: Alignment.center,
-                            child: Text("${index + 1}"),
+                            child: TextButton(
+                              onPressed: blockValue.isDefault
+                                  ? null
+                                  : () => setFocus(index, indexChar),
+                              child: Text(
+                                "${blockValue.text}",
+                                style: TextStyle(color: colorText),
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -75,44 +143,195 @@ class _GameTable extends State<GameTable> {
               //Kezelőfelület kirakás 9 gomb 1-től 9-ig + 1 törlés
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.all(2),
+                  padding: const EdgeInsets.all(20),
                   color: Colors.teal,
-                  width: double.maxFinite,
                   alignment: Alignment.center,
-                  child: GridView.builder(
-                    itemCount: 9,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 1,
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 5,
-                    ),
-                    physics: const ScrollPhysics(),
-                    itemBuilder: (buildContext, index) {
-                      return Container(
-                        margin: const EdgeInsets.all(3),
-                        color: Colors.yellow.shade100,
-                        alignment: Alignment.center,
-                        child: Text("${index + 1}"),
-                      );
-                    },
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      SizedBox(
+                        width: 250,
+                        height: 250,
+                        child: GridView.builder(
+                          itemCount: 9,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 1,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 5,
+                          ),
+                          physics: const ScrollPhysics(),
+                          itemBuilder: (buildContext, index) {
+                            return ElevatedButton(
+                              onPressed: () => setInput(index + 1),
+                              child: Text("${index + 1}"),
+                            );
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: ElevatedButton(
+                            onPressed: () => setInput(null),
+                            style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(250, 250)),
+                            child: const Text('Törlés'),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              Expanded(
-                child: Container(
-                    child: InkWell(
-                  child: Text('Tes'),
-                )),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  generatePuzzle(generatePuzzle) {
+    // install plugins sudoku generator to generate one
+    innerBoxes.clear();
+    var sudokuGenerator = SudokuGenerator(emptySquares: 25); //54
+    // then we populate to get a possible cmbination
+    // Quiver for easy populate collection using partition
+    List<List<List<int>>> completes = partition(sudokuGenerator.newSudokuSolved,
+            sqrt(sudokuGenerator.newSudoku.length).toInt())
+        .toList();
+    partition(sudokuGenerator.newSudoku,
+            sqrt(sudokuGenerator.newSudoku.length).toInt())
+        .toList()
+        .asMap()
+        .entries
+        .forEach(
+      (entry) {
+        List<int> tempListCompletes =
+            completes[entry.key].expand((element) => element).toList();
+        List<int> tempList = entry.value.expand((element) => element).toList();
+
+        tempList.asMap().entries.forEach((entryIn) {
+          int index =
+              entry.key * sqrt(sudokuGenerator.newSudoku.length).toInt() +
+                  (entryIn.key % 9).toInt() ~/ 3;
+
+          if (innerBoxes.where((element) => element.index == index).length ==
+              0) {
+            innerBoxes.add(InnerBox(index, []));
+          }
+
+          InnerBox innerBox =
+              innerBoxes.where((element) => element.index == index).first;
+
+          innerBox.blockValues.add(BlockValue(
+            entryIn.value == 0 ? "" : entryIn.value.toString(),
+            index: innerBox.blockValues.length,
+            isDefault: entryIn.value != 0,
+            isCorrect: entryIn.value != 0,
+            correctText: tempListCompletes[entryIn.key].toString(),
+          ));
+        });
+      },
+    );
+
+    // complte generate puzzle sudoku
+  }
+
+  setFocus(int index, int indexChar) {
+    tapBoxIndex = "$index-$indexChar";
+    focusClass.setData(index, indexChar);
+    showFocusCenterLine();
+    setState(() {});
+  }
+
+  void showFocusCenterLine() {
+    // set focus color for line vertical & horizontal
+    int rowNoBox = focusClass.indexBox! ~/ 3;
+    int colNoBox = focusClass.indexBox! % 3;
+
+    this.innerBoxes.forEach((element) => element.clearFocus());
+
+    innerBoxes.where((element) => element.index ~/ 3 == rowNoBox).forEach(
+        (e) => e.setFocus(focusClass.indexChar!, Direction.Horizontal));
+
+    innerBoxes
+        .where((element) => element.index % 3 == colNoBox)
+        .forEach((e) => e.setFocus(focusClass.indexChar!, Direction.Vertical));
+  }
+
+  setInput(int? number) {
+    // set input data based grid
+    // or clear out data
+    if (focusClass.indexBox == null) return;
+    if (innerBoxes[focusClass.indexBox!]
+                .blockValues[focusClass.indexChar!]
+                .text ==
+            number.toString() ||
+        number == null) {
+      innerBoxes.forEach((element) {
+        element.clearFocus();
+        element.clearExist();
+      });
+      innerBoxes[focusClass.indexBox!]
+          .blockValues[focusClass.indexChar!]
+          .setEmpty();
+      tapBoxIndex = null;
+      isFinish = false;
+      showSameInputOnSameLine();
+    } else {
+      innerBoxes[focusClass.indexBox!]
+          .blockValues[focusClass.indexChar!]
+          .setText("$number");
+
+      showSameInputOnSameLine();
+
+      checkFinish();
+    }
+
+    setState(() {});
+  }
+
+  void showSameInputOnSameLine() {
+    // show duplicate number on same line vertical & horizontal so player know he or she put a wrong value on somewhere
+
+    int rowNoBox = focusClass.indexBox! ~/ 3;
+    int colNoBox = focusClass.indexBox! % 3;
+
+    String textInput = innerBoxes[focusClass.indexBox!]
+        .blockValues[focusClass.indexChar!]
+        .text!;
+
+    innerBoxes.forEach((element) => element.clearExist());
+
+    innerBoxes.where((element) => element.index ~/ 3 == rowNoBox).forEach((e) =>
+        e.setExistValue(focusClass.indexChar!, focusClass.indexBox!, textInput,
+            Direction.Horizontal));
+
+    innerBoxes.where((element) => element.index % 3 == colNoBox).forEach((e) =>
+        e.setExistValue(focusClass.indexChar!, focusClass.indexBox!, textInput,
+            Direction.Vertical));
+
+    List<BlockValue> exists = innerBoxes
+        .map((element) => element.blockValues)
+        .expand((element) => element)
+        .where((element) => element.isExist)
+        .toList();
+
+    if (exists.length == 1) exists[0].isExist = false;
+  }
+
+  void checkFinish() {
+    int totalUnfinish = innerBoxes
+        .map((e) => e.blockValues)
+        .expand((element) => element)
+        .where((element) => !element.isCorrect)
+        .length;
+
+    isFinish = totalUnfinish == 0;
   }
 }
