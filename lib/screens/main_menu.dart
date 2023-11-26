@@ -22,7 +22,6 @@ class MainMenu extends StatelessWidget {
             loginImage(_loginImagePath),
             buttonPushNamed('New Game', context, '/GameDifficulty'),
             buttonPushNamed('Settings', context, '/Settings'),
-            buttonPushNamed('Quit', context, '/'),
 
           ],
         )),

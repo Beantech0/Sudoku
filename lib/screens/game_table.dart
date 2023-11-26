@@ -12,31 +12,36 @@ import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
 
 class GameTable extends StatefulWidget {
   const GameTable({super.key, required difficultyLevel});
-
   @override
   State<GameTable> createState() => _GameTable();
 }
 
 class _GameTable extends State<GameTable> {
+  late final int difficultyLevel =
+      ModalRoute.of(context)!.settings.arguments as int;
   List<InnerBox> innerBoxes = [];
   FocusClass focusClass = FocusClass();
   bool isFinish = false;
   String? tapBoxIndex;
-  
-  get emptyBlockNumber => null;
 
+  // Az oldal létrejötténél fut le.
   @override
   void initState() {
-
-    generateSudoku();
     super.initState();
+  }
+
+  //Az initState után fut le amikor már megkapjuk a context értékét és tudjuk hogy milyen a nehézségi fokozat.
+  @override
+  void didChangeDependencies() {
+    generateSudoku();
+    super.didChangeDependencies();
   }
 
   void generateSudoku() {
     isFinish = false;
     focusClass = FocusClass();
     tapBoxIndex = null;
-    generatePuzzle(emptyBlockNumber);
+    generatePuzzle(difficultyLevel);
     checkFinish();
 
     setState(() {});
@@ -44,20 +49,9 @@ class _GameTable extends State<GameTable> {
 
   @override
   Widget build(BuildContext context) {
-    final difficultyLevel = ModalRoute.of(context)!.settings.arguments;
-    String difficulty = difficultyLevel.toString();
-
-    Map difficultyList = {
-      5:  'Test',
-      18: 'Easy',
-      27: 'Medium',
-      36: 'Hard',
-    };
-    var emptyBlockNumber = difficultyList.keys.firstWhere((element) => difficultyList[element] == difficulty, orElse: () => 2);
-
     return Scaffold(
       appBar: AppBar(
-        title:  Text(emptyBlockNumber.toString()),
+        title: const Text('Game'),
         backgroundColor: Colors.teal,
       ),
       body: SafeArea(
@@ -109,20 +103,24 @@ class _GameTable extends State<GameTable> {
 
                           // change color base condition
 
-                          if (isFinish)
+                          if (isFinish) {
                             color = Colors.green;
-                          else if (blockValue.isFocus && blockValue.text != "")
+                          } else if (blockValue.isFocus &&
+                              blockValue.text != "") {
                             color = Colors.brown.shade100;
-                          else if (blockValue.isDefault)
+                          } else if (blockValue.isDefault) {
                             color = Colors.grey.shade400;
+                          }
 
-                          if (tapBoxIndex == "${index}-${indexChar}" &&
-                              !isFinish) color = Colors.blue.shade100;
+                          if (tapBoxIndex == "$index-$indexChar" && !isFinish) {
+                            color = Colors.blue.shade100;
+                          }
 
-                          if (this.isFinish)
+                          if (isFinish) {
                             colorText = Colors.white;
-                          else if (blockValue.isExist) colorText = Colors.red;
-
+                          } else if (blockValue.isExist) {
+                            colorText = Colors.red;
+                          }
                           return Container(
                             color: color,
                             alignment: Alignment.center,
@@ -198,10 +196,10 @@ class _GameTable extends State<GameTable> {
     );
   }
 
-  generatePuzzle(generatePuzzle) {
+  generatePuzzle(difficultyLevel) {
     // install plugins sudoku generator to generate one
     innerBoxes.clear();
-    var sudokuGenerator = SudokuGenerator(emptySquares: 25); //54
+    var sudokuGenerator = SudokuGenerator(emptySquares: difficultyLevel); //54
     // then we populate to get a possible cmbination
     // Quiver for easy populate collection using partition
     List<List<List<int>>> completes = partition(sudokuGenerator.newSudokuSolved,

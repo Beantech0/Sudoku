@@ -1,7 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+    Map difficultyList = {
+      5:  'Test',
+      18: 'Easy',
+      27: 'Medium',
+      36: 'Hard',
+    };
 
 Widget buttonPushNamed(String buttonText, context, String navigateTo) {
+  var emptyBlockNumber = difficultyList.keys.firstWhere((element) => difficultyList[element] == buttonText, orElse: () => 2);
   return Padding(
     padding: const EdgeInsets.all(10),
     child: ElevatedButton(
@@ -9,7 +16,7 @@ Widget buttonPushNamed(String buttonText, context, String navigateTo) {
         backgroundColor: MaterialStatePropertyAll<Color>(Colors.teal),
       ),
       onPressed: () {
-        Navigator.pushNamed(context, navigateTo, arguments: buttonText);
+        Navigator.pushNamed(context, navigateTo, arguments: emptyBlockNumber);
       },
       child: Text(
         buttonText,
