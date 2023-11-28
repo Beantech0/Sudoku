@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "163166246802",
+    "project_id": "sudokuflutter-ef5bb",
+    "storage_bucket": "sudokuflutter-ef5bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163166246802:android:1ac6139c0cfce752d1d34b",
+        "android_client_info": {
+          "package_name": "com.example.sudoku"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBooqWhkKSrRV-6FTnRzZDi99vu27zjris"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
