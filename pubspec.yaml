@@ -37,6 +37,14 @@ dependencies:
   cupertino_icons: ^1.0.2
   provider: ^6.1.1
   firebase_core:
+
+  #lokális adattároláshoz
+  shared_preferences: ^2.2.2
+
+  #localization package a több nyelv kezelésére
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
