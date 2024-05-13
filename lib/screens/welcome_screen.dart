@@ -13,18 +13,15 @@ class WelcomeScreen extends StatelessWidget {
         title: const Text('Login'),
         backgroundColor: Colors.teal,
       ),
-      body: Container(
-        // decoration: BoxDecoration(color: Colors.grey[300]),
-        child: Form(
-            child: ListView(
-          children: [
-            loginImage(_loginImagePath),
-            buttonPushNamed('Login', context, '/Login'),
-            buttonPushNamed('Play without Login', context, '/MainMenu'),
-            buttonQuit('Quit', context),
-          ],
-        )),
-      ),
+      body: Form(
+          child: ListView(
+        children: [
+          loginImage(_loginImagePath),
+          buttonPushNamed('Login', context, '/Login'),
+          buttonPushNamed('Play without Login', context, '/MainMenu'),
+          buttonQuit('Quit', context),
+        ],
+      )),
     );
   }
 }

@@ -13,23 +13,20 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
         backgroundColor: Colors.teal,
       ),
-      body: Container(
-        // decoration: BoxDecoration(color: Colors.grey[300]),
-        child: Form(
-            child: ListView(
-          children: [
-            loginImage(_loginImagePath),
-            inputTextField('E-mail Address'),
-            inputTextField('Password'),
-            buttonPushNamed('Login', context, '/MainMenu'),
-            buttonPushNamed('Registration', context, '/Settings'),
-            buttonPushNamed('Login With Google', context, '/Scoreboard'),
-          ],
-        )),
-      ),
+      body: Form(
+          child: ListView(
+        children: [
+          loginImage(_loginImagePath),
+          inputTextField('E-mail Address'),
+          inputTextField('Password'),
+          buttonPushNamed('Login', context, '/MainMenu'),
+          buttonPushNamed('Registration', context, '/Settings'),
+          buttonPushNamed('Login With Google', context, '/Scoreboard'),
+        ],
+      )),
     );
   }
 }

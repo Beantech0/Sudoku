@@ -199,12 +199,15 @@ class _GameTable extends State<GameTable> {
   generatePuzzle(difficultyLevel) {
     // install plugins sudoku generator to generate one
     innerBoxes.clear();
-    var sudokuGenerator = SudokuGenerator(emptySquares: difficultyLevel); //54
+    var sudokuGenerator = SudokuGenerator(emptySquares: difficultyLevel, uniqueSolution: true); //54
+    print("Print Sudoku Generator");
+    print(sudokuGenerator.newSudokuSolved);
     // then we populate to get a possible cmbination
     // Quiver for easy populate collection using partition
     List<List<List<int>>> completes = partition(sudokuGenerator.newSudokuSolved,
             sqrt(sudokuGenerator.newSudoku.length).toInt())
         .toList();
+    print(sqrt(sudokuGenerator.newSudoku.length).toInt());
     partition(sudokuGenerator.newSudoku,
             sqrt(sudokuGenerator.newSudoku.length).toInt())
         .toList()
@@ -212,6 +215,8 @@ class _GameTable extends State<GameTable> {
         .entries
         .forEach(
       (entry) {
+        print(completes);
+        print("Entry String: $entry");
         List<int> tempListCompletes =
             completes[entry.key].expand((element) => element).toList();
         List<int> tempList = entry.value.expand((element) => element).toList();
@@ -221,8 +226,7 @@ class _GameTable extends State<GameTable> {
               entry.key * sqrt(sudokuGenerator.newSudoku.length).toInt() +
                   (entryIn.key % 9).toInt() ~/ 3;
 
-          if (innerBoxes.where((element) => element.index == index).length ==
-              0) {
+          if (innerBoxes.where((element) => element.index == index).isEmpty) {
             innerBoxes.add(InnerBox(index, []));
           }
 
@@ -255,7 +259,9 @@ class _GameTable extends State<GameTable> {
     int rowNoBox = focusClass.indexBox! ~/ 3;
     int colNoBox = focusClass.indexBox! % 3;
 
-    this.innerBoxes.forEach((element) => element.clearFocus());
+    for (var element in innerBoxes) {
+      element.clearFocus();
+    }
 
     innerBoxes.where((element) => element.index ~/ 3 == rowNoBox).forEach(
         (e) => e.setFocus(focusClass.indexChar!, Direction.Horizontal));
@@ -274,10 +280,10 @@ class _GameTable extends State<GameTable> {
                 .text ==
             number.toString() ||
         number == null) {
-      innerBoxes.forEach((element) {
+      for (var element in innerBoxes) {
         element.clearFocus();
         element.clearExist();
-      });
+      }
       innerBoxes[focusClass.indexBox!]
           .blockValues[focusClass.indexChar!]
           .setEmpty();
@@ -307,7 +313,9 @@ class _GameTable extends State<GameTable> {
         .blockValues[focusClass.indexChar!]
         .text!;
 
-    innerBoxes.forEach((element) => element.clearExist());
+    for (var element in innerBoxes) {
+      element.clearExist();
+    }
 
     innerBoxes.where((element) => element.index ~/ 3 == rowNoBox).forEach((e) =>
         e.setExistValue(focusClass.indexChar!, focusClass.indexBox!, textInput,

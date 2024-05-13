@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-late SharedPreferences prefs;
-
-
 class Settings extends StatefulWidget {
   const Settings({super.key});
   
@@ -12,7 +9,30 @@ class Settings extends StatefulWidget {
 }
 
 class _Settings extends State<Settings> {
-  bool darkMode = false;
+  late SharedPreferences prefs;
+  bool isDarkMode = false;
+  bool showWrongNumbersInRed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSettings();
+  }
+
+  Future<void> _loadSettings() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isDarkMode = prefs.getBool('darkMode') ?? true;
+    });
+  }
+
+  void _toggleDarkMode(bool newValue) {
+    setState(() {
+      isDarkMode = newValue;
+      prefs.setBool('darkMode', isDarkMode);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,13 +50,19 @@ class _Settings extends State<Settings> {
           ),
           SwitchListTile(
             title: const Text('Dark Theme'),
-            value: darkMode,
-            onChanged: (bool value) {
-              setState(() {
-                // _darkMode = value;
-                prefs.setBool('darkMode', value);
-              });
-            },
+            value: isDarkMode,
+            onChanged: _toggleDarkMode,
+            secondary: const Icon(Icons.color_lens_outlined),
+          ),
+                    const Card(
+            child: ListTile(
+              title: Text('Game Settings'),
+            ),
+          ),
+          SwitchListTile(
+            title: const Text('Show wrong numbers in red colos'),
+            value: showWrongNumbersInRed,
+            onChanged: null,
             secondary: const Icon(Icons.color_lens_outlined),
           )
         ],

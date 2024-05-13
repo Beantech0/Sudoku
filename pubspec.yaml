@@ -39,7 +39,7 @@ dependencies:
   firebase_core:
 
   #lokális adattároláshoz
-  shared_preferences: ^2.2.2
+  shared_preferences: ^2.2.3
 
   #localization package a több nyelv kezelésére
   flutter_localizations:

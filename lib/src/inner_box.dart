@@ -20,9 +20,9 @@ class InnerBox {
           .toList();
     }
 
-    temp.forEach((element) {
+    for (var element in temp) {
       element.isFocus = true;
-    });
+    }
   }
 
   setExistValue(
@@ -54,16 +54,17 @@ class InnerBox {
   }
 
   clearFocus() {
-    blockValues.forEach((element) {
+    for (var element in blockValues) {
       element.isFocus = false;
-    });
+    }
   }
 
   clearExist() {
-    blockValues.forEach((element) {
+    for (var element in blockValues) {
       element.isExist = false;
-    });
+    }
   }
 }
 
+// ignore: constant_identifier_names
 enum Direction { Horizontal, Vertical }

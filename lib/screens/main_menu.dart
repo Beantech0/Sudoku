@@ -13,18 +13,15 @@ class MainMenu extends StatelessWidget {
         title: const Text('Sudoku'),
         backgroundColor: Colors.teal,
       ),
-      body: Container(
-        // decoration: BoxDecoration(color: Colors.grey[300]),
-        child: Form(
-            child: ListView(
-          children: [
-            loginImage(_loginImagePath),
-            buttonPushNamed('New Game', context, '/GameDifficulty'),
-            buttonPushNamed('Settings', context, '/Settings'),
-            buttonPushNamed('Scoreboard', context, '/Scoreboard'),
-          ],
-        )),
-      ),
+      body: Form(
+          child: ListView(
+        children: [
+          loginImage(_loginImagePath),
+          buttonPushNamed('New Game', context, '/GameDifficulty'),
+          buttonPushNamed('Settings', context, '/Settings'),
+          buttonPushNamed('Scoreboard', context, '/Scoreboard'),
+        ],
+      )),
     );
   }
 }
