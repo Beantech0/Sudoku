@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sudoku/screens/Settings.dart';
 import 'package:sudoku/screens/game_difficulty.dart';
 import 'package:sudoku/screens/main_menu.dart';
+import 'package:sudoku/screens/scoreboard.dart';
 import 'package:sudoku/screens/welcome_screen.dart';
 import 'package:sudoku/screens/game_table.dart';
 import 'package:sudoku/screens/login.dart';
@@ -47,7 +48,8 @@ class SudokuApp extends StatelessWidget {
               difficultyLevel: null,
             ),
         '/Settings': (context) => const Settings(),
-        '/GameDifficulty': (context) => const GameDifficulty()
+        '/GameDifficulty': (context) => const GameDifficulty(),
+        '/Scoreboard': (context) => const Scoreboard()
       },
       theme: isDarkMode ? ThemeData.dark(useMaterial3: false) : ThemeData.light( useMaterial3: false),
       debugShowCheckedModeBanner: false,
