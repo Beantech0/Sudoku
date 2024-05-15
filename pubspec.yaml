@@ -32,10 +32,15 @@ dependencies:
     sdk: flutter
   sudoku_solver_generator: ^2.1.0+1
   quiver: ^3.0.1+1
+  path: ^1.9.0
+  path_provider: ^2.1.3
+  sqflite_common_ffi: ^2.3.3
+  
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   provider: ^6.1.1
+  
   firebase_core:
 
   #lokális adattároláshoz

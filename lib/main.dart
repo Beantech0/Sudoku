@@ -10,15 +10,18 @@ import 'package:sudoku/screens/login.dart';
 // import 'firebase_options.dart';
 import 'package:flutter_localizations/flutter_localizations.dart'; //több nyelv támogatása
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sudoku/db/db_helper.dart';
 
 // Start App
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  //initialize the database
+  await DatabaseHelper.instance.database;
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isDarkMode = prefs.getBool('darkMode') ?? true;
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+
   runApp(SudokuApp(isDarkMode: isDarkMode, prefs: prefs));
 }
 

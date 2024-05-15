@@ -10,7 +10,7 @@ class GameDifficulty extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sudoku'),
+        title: const Text('Game difficulty'),
         backgroundColor: Colors.teal,
       ),
       body: Container(
