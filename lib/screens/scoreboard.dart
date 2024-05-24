@@ -15,7 +15,6 @@ class Scoreboard extends StatelessWidget {
         backgroundColor: Colors.teal,
       ),
       body: Container(
-        decoration: BoxDecoration(color: Colors.grey[300]),
         child: Form(
             child: ListView(
           children: [

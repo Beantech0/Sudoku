@@ -1,5 +1,4 @@
 import 'dart:io' as io;
-
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -48,7 +47,7 @@ class DatabaseHelper {
     Database db,
     int version,
   ) async {
-    // create 'users' table where the user credential will be stored
+    // Tábla létrehozás első futtásnál.
     await db.execute('''
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY,

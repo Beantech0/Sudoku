@@ -21,10 +21,9 @@ class Login extends StatelessWidget {
         children: [
           loginImage(_loginImagePath),
           inputTextField('E-mail Address'),
-          inputTextField('Password'),
+          inputTextFieldPass('Password'),
           buttonPushNamed('Login', context, '/MainMenu'),
-          buttonPushNamed('Registration', context, '/Settings'),
-          buttonPushNamed('Login With Google', context, '/Scoreboard'),
+          buttonPushNamed('Registration', context, '/Registration'),
         ],
       )),
     );

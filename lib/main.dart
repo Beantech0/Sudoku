@@ -1,26 +1,31 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:sudoku/screens/Settings.dart';
 import 'package:sudoku/screens/game_difficulty.dart';
 import 'package:sudoku/screens/main_menu.dart';
+import 'package:sudoku/screens/registration.dart';
 import 'package:sudoku/screens/scoreboard.dart';
 import 'package:sudoku/screens/welcome_screen.dart';
 import 'package:sudoku/screens/game_table.dart';
 import 'package:sudoku/screens/login.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'firebase_options.dart';
-import 'package:flutter_localizations/flutter_localizations.dart'; //több nyelv támogatása
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sudoku/db/db_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:window_size/window_size.dart';
 
 // Start App
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  //initialize the database
+  //local DB inicializálás
   await DatabaseHelper.instance.database;
-
+  // SharedPreferences instance létrehozása
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isDarkMode = prefs.getBool('darkMode') ?? true;
+
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      setWindowTitle('Sudoku');
+      setWindowMaxSize(const Size(720, 1280));
+      setWindowMinSize(const Size(720, 1280));
+  }
 
   runApp(SudokuApp(isDarkMode: isDarkMode, prefs: prefs));
 }
@@ -33,15 +38,7 @@ class SudokuApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en'), // English
-        Locale('hu'), // Hungary
-      ],
+      restorationScopeId: "Test",
       initialRoute: '/WelcomeScreen',
       routes: {
         '/WelcomeScreen': (context) => const WelcomeScreen(),
@@ -52,7 +49,8 @@ class SudokuApp extends StatelessWidget {
             ),
         '/Settings': (context) => const Settings(),
         '/GameDifficulty': (context) => const GameDifficulty(),
-        '/Scoreboard': (context) => const Scoreboard()
+        '/Scoreboard': (context) => const Scoreboard(),
+        '/Registration': (context) => const Registration(),
       },
       theme: isDarkMode ? ThemeData.dark(useMaterial3: false) : ThemeData.light( useMaterial3: false),
       debugShowCheckedModeBanner: false,

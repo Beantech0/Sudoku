@@ -12,3 +12,16 @@ Widget inputTextField(String labeltext) {
     ),
   );
 }
+
+Widget inputTextFieldPass(String labeltext) {
+  return Padding(
+    padding: const EdgeInsets.all(10),
+    child: TextFormField(
+      obscureText: true,
+      decoration: InputDecoration(
+        labelText: labeltext,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+      ),
+    ),
+  );
+}
