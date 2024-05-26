@@ -12,14 +12,17 @@ import 'package:sudoku/db/db_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_size/window_size.dart';
 
+late SharedPreferences sharedPreferences;
+
 // Start App
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   //local DB inicializálás
   await DatabaseHelper.instance.database;
   // SharedPreferences instance létrehozása
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool isDarkMode = prefs.getBool('darkMode') ?? true;
+  sharedPreferences = await SharedPreferences.getInstance();
+  bool isDarkMode = sharedPreferences.getBool('darkMode') ?? true;
 
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       setWindowTitle('Sudoku');
@@ -27,7 +30,7 @@ Future<void> main() async {
       setWindowMinSize(const Size(720, 1280));
   }
 
-  runApp(SudokuApp(isDarkMode: isDarkMode, prefs: prefs));
+  runApp(SudokuApp(isDarkMode: isDarkMode, prefs: sharedPreferences));
 }
 
 class SudokuApp extends StatelessWidget {
@@ -37,6 +40,7 @@ class SudokuApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    // final bool? isLoggedIn = sharedPreferences.getBool('IS_LOGGED_IN');
     return MaterialApp(
       restorationScopeId: "Test",
       initialRoute: '/WelcomeScreen',
@@ -58,4 +62,3 @@ class SudokuApp extends StatelessWidget {
     );
   }
 }
-

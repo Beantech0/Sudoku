@@ -1,4 +1,5 @@
 import 'dart:io' as io;
+
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -47,14 +48,63 @@ class DatabaseHelper {
     Database db,
     int version,
   ) async {
-    // Tábla létrehozás első futtásnál.
+    // create 'users' table where the user credential will be stored
     await db.execute('''
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY,
-        name TEXT,
         username TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL
       )
     ''');
+  }
+
+  Future<int> createUser(
+      {required String username,
+      required String password}) async {
+    Database db = await instance.database;
+
+    return await db.insert(
+      'users',
+      <String, Object?>{
+        'username': username,
+        'password': password,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<Map<String, Object?>>> loginUser({
+    required String username,
+    required String password,
+  }) async {
+    final db = await DatabaseHelper.instance.database;
+
+    // query the database for the user
+    return await db.query(
+      'users',
+      where: 'username = ? AND password = ?',
+      whereArgs: [
+        username,
+        password,
+      ],
+    );
+  }
+
+    Future<int> checkUser({
+    required String username,
+  }) async {
+    final db = await DatabaseHelper.instance.database;
+
+    int count = await db.rawQuery('SELECT COUNT(*) FROM users WHERE username = ?'););
+
+    return count;
+    // query the database for the user
+    // return await db.query(
+    //   'users',
+    //   where: 'username = ?',
+    //   whereArgs: [
+    //     username,
+    //   ],
+    // );
   }
 }
