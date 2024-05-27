@@ -15,7 +15,9 @@ Widget buttonPushNamed(String buttonText, context, String navigateTo) {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                     child: FilledButton(
+                      
                       style: FilledButton.styleFrom(
+                        backgroundColor: Colors.teal,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -35,7 +37,9 @@ Widget buttonQuit(String buttonText, context) {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                     child: FilledButton(
+                      
                       style: FilledButton.styleFrom(
+                        backgroundColor: Colors.teal,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),

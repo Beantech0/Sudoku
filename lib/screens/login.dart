@@ -34,10 +34,11 @@ class _LoginState extends State<Login> {
     if (user.isNotEmpty) {
       //store login state
       sharedPreferences.setBool('IS_LOGGED_IN', true);
+      sharedPreferences.setString('loggedUser', username);
 
       // User found, login successful
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Login successful!'),
+        content: Text('Sikeres belépés!'),
         backgroundColor: Colors.green,
       ));
 

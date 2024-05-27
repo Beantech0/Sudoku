@@ -19,10 +19,6 @@ class Scoreboard extends StatelessWidget {
             child: ListView(
           children: [
             loginImage(_loginImagePath),
-            buttonPushNamed('Test', context, '/GameTable'),
-            buttonPushNamed('Easy', context, '/GameTable'),
-            buttonPushNamed('Medium', context, '/GameTable'),
-            buttonPushNamed('Hard', context, '/GameTable'),
           ],
         )),
       ),

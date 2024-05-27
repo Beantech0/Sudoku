@@ -33,6 +33,14 @@ class _RegistrationState extends State<Registration> {
     }
 
     int userIsExists = await DatabaseHelper.instance.checkUser(username: username);
+
+    if (userIsExists > 0) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('A megadott felhasználónév már létezik!'),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
     // result returns the ID of the latest inserted record
     int result = await DatabaseHelper.instance
         .createUser(username: username, password: password);
@@ -51,7 +59,7 @@ class _RegistrationState extends State<Registration> {
     } else {
       //
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Failed to register user!'),
+        content: Text('Hiba!'),
         backgroundColor: Colors.red,
       ));
     }

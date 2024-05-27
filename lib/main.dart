@@ -23,7 +23,7 @@ Future<void> main() async {
   // SharedPreferences instance létrehozása
   sharedPreferences = await SharedPreferences.getInstance();
   bool isDarkMode = sharedPreferences.getBool('darkMode') ?? true;
-
+  final bool? isLoggedIn = sharedPreferences.getBool('IS_LOGGED_IN');
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       setWindowTitle('Sudoku');
       setWindowMaxSize(const Size(720, 1280));
@@ -40,7 +40,7 @@ class SudokuApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    // final bool? isLoggedIn = sharedPreferences.getBool('IS_LOGGED_IN');
+  
     return MaterialApp(
       restorationScopeId: "Test",
       initialRoute: '/WelcomeScreen',

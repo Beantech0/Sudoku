@@ -89,22 +89,13 @@ class DatabaseHelper {
       ],
     );
   }
-
-    Future<int> checkUser({
+  
+  Future<int> checkUser({
     required String username,
   }) async {
     final db = await DatabaseHelper.instance.database;
-
-    int count = await db.rawQuery('SELECT COUNT(*) FROM users WHERE username = ?'););
-
+    var result = await db.rawQuery('SELECT COUNT(*) FROM users WHERE username > ?', [username]);
+    int count = result.first['COUNT(*)'] as int;
     return count;
-    // query the database for the user
-    // return await db.query(
-    //   'users',
-    //   where: 'username = ?',
-    //   whereArgs: [
-    //     username,
-    //   ],
-    // );
   }
 }
