@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sudoku/db/db_helper.dart';
 import 'package:sudoku/main.dart';
+import 'package:sudoku/screens/main_menu.dart';
 import 'package:sudoku/screens/registration.dart';
 import 'package:sudoku/screens/welcome_screen.dart';
 import 'package:sudoku/widgets/buttons.dart';
@@ -46,7 +47,7 @@ class _LoginState extends State<Login> {
       // and remove all routes on top of it from the navigation stack.
       // This will prevent the user from clicking back button
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+          MaterialPageRoute(builder: (context) => const MainMenu()),
           (route) => false);
     } else {
       // User not found or incorrect password
@@ -85,6 +86,7 @@ class _LoginState extends State<Login> {
                     controller: _usernameController,
                     decoration: InputDecoration(
                       hintText: 'Username',
+                      prefixIcon: const Icon(Icons.alternate_email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),

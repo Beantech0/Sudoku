@@ -22,8 +22,12 @@ Future<void> main() async {
   await DatabaseHelper.instance.database;
   // SharedPreferences instance létrehozása
   sharedPreferences = await SharedPreferences.getInstance();
+
   bool isDarkMode = sharedPreferences.getBool('darkMode') ?? true;
-  final bool? isLoggedIn = sharedPreferences.getBool('IS_LOGGED_IN');
+  sharedPreferences.setBool('IS_LOGGED_IN', false);
+  sharedPreferences.setString('loggedUser', '');
+  sharedPreferences.setInt('loggedUserID', 0);
+  // final bool? isLoggedIn = sharedPreferences.getBool('IS_LOGGED_IN');
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       setWindowTitle('Sudoku');
       setWindowMaxSize(const Size(720, 1280));

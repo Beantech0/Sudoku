@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:sudoku/main.dart';
 import 'package:sudoku/widgets/buttons.dart';
 import 'package:sudoku/widgets/images.dart';
 
-class Scoreboard extends StatelessWidget {
-  final String _loginImagePath = 'images/sudoku_logo_transparent.png';
+class Scoreboard extends StatefulWidget {
 
   const Scoreboard({super.key});
+
+  @override
+  State<Scoreboard> createState() => _ScoreboardState();
+}
+
+class _ScoreboardState extends State<Scoreboard> {
+  String? loggedUser = sharedPreferences.getString('loggedUser') ?? "";
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +21,49 @@ class Scoreboard extends StatelessWidget {
         title: const Text('Scoreboard'),
         backgroundColor: Colors.teal,
       ),
-      body: Container(
-        child: Form(
-            child: ListView(
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+              child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            loginImage(_loginImagePath),
+            Text(
+              'Szia, $loggedUser',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.green),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Play Count: ',style: TextStyle(fontSize: 20),),
+                  Text('Hard: ',style: TextStyle(fontSize: 20),),
+                  Text('Medium: ',style: TextStyle(fontSize: 20),),
+                  Text('Easy: ',style: TextStyle(fontSize: 20),),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.green),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text('Fastest game:  min',style: TextStyle(fontSize: 20),),
+            ),
           ],
-        )),
+                    ),),
+        ),
       ),
     );
   }

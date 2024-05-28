@@ -48,6 +48,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                       onPressed: () {
                         _logout();
+                        
                       },
                       child: const Text('Logout'),
                     ),
@@ -61,8 +62,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   _logout() {
-    sharedPreferences.setBool('IS_LOGGED_IN', false);
-    sharedPreferences.setString('loggedUser', "");
-    setState(() {});
+    // sharedPreferences.setBool('IS_LOGGED_IN', false);
+    // sharedPreferences.setString('loggedUser', "");
+    // setState(() {});
+    Navigator.pushNamed(context, '/WelcomeScreen');
   }
 }
