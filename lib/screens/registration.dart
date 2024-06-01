@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sudoku/db/db_helper.dart';
 import 'package:sudoku/screens/login.dart';
-import 'package:sudoku/widgets/buttons.dart';
 import 'package:sudoku/widgets/images.dart';
-import 'package:sudoku/widgets/inputFields.dart';
 
 class Registration extends StatefulWidget {
   const Registration({super.key});

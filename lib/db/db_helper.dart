@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io' as io;
 
 import 'package:path/path.dart' as p;
@@ -48,12 +49,24 @@ class DatabaseHelper {
     Database db,
     int version,
   ) async {
-    // create 'users' table where the user credential will be stored
+    // 'users' tábla létrehozása
     await db.execute('''
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY,
         username TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL
+      )
+    ''');
+    
+    // 'history' tábla létrehozása
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS history (
+        id INTEGER PRIMARY KEY,
+        userid INTEGER NOT NULL,
+        start_time TEXT NOT NULL,
+        end_time TEXT NULL,
+        isFinished INTEGER NOT NULL,
+        difficulty TEXT NOT NULL
       )
     ''');
   }
@@ -68,6 +81,24 @@ class DatabaseHelper {
       <String, Object?>{
         'username': username,
         'password': password,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+    Future<int> createHistory(
+      {
+        required Int userid,
+        required String startTime,
+        required String difficulty }) async {
+    Database db = await instance.database;
+
+    return await db.insert(
+      'history',
+      <String, Object?>{
+        'userid': userid,
+        'start_time': startTime,
+        'difficulty': difficulty
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );

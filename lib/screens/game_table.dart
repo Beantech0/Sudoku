@@ -5,29 +5,44 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:quiver/iterables.dart';
+import 'package:sudoku/db/db_helper.dart';
+import 'package:sudoku/main.dart';
 import 'package:sudoku/src/block_value.dart';
 import 'package:sudoku/src/focus.dart';
 import 'package:sudoku/src/inner_box.dart';
 import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
 
 class GameTable extends StatefulWidget {
-  const GameTable({super.key, required difficultyLevel});
+  const GameTable({super.key, required difficultyLevel, required difficulty});
   @override
   State<GameTable> createState() => _GameTable();
 }
 
 class _GameTable extends State<GameTable> {
-  late final int difficultyLevel =
-      ModalRoute.of(context)!.settings.arguments as int;
+  // late final int difficultyLevel =ModalRoute.of(context)!.settings.arguments['difficultyLevel'] as int;
+  late final arguments = (ModalRoute.of(context)!.settings.arguments ?? <String, dynamic>{}) as Map;
+  late final int difficultyLevel = arguments['difficultyLevel'].ToInt();
+  late String difficulty = difficulty;
   List<InnerBox> innerBoxes = [];
   FocusClass focusClass = FocusClass();
   bool isFinish = false;
   String? tapBoxIndex;
 
+    // Future<void> _saveHistory(loggedUserID, difficulty) async {  
+    //       int result = await DatabaseHelper.instance
+    //     .createHistory(userid: loggedUserID, startTime: ,difficulty: );
+    // }
+
   // Az oldal létrejötténél fut le.
   @override
   void initState() {
+    String? loggedUserID = sharedPreferences.getString('loggedUserID') ?? "";
+    print(arguments);
+    print('Ez lefut még:');
+    // print('difficulty: $difficulty');
+    // _saveHistory(loggedUserID, );
     super.initState();
+    
   }
 
   //Az initState után fut le amikor már megkapjuk a context értékét és tudjuk hogy milyen a nehézségi fokozat.
@@ -49,6 +64,7 @@ class _GameTable extends State<GameTable> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Game'),
@@ -200,14 +216,11 @@ class _GameTable extends State<GameTable> {
     // install plugins sudoku generator to generate one
     innerBoxes.clear();
     var sudokuGenerator = SudokuGenerator(emptySquares: difficultyLevel, uniqueSolution: true); //54
-    print("Print Sudoku Generator");
-    print(sudokuGenerator.newSudokuSolved);
     // then we populate to get a possible cmbination
     // Quiver for easy populate collection using partition
     List<List<List<int>>> completes = partition(sudokuGenerator.newSudokuSolved,
             sqrt(sudokuGenerator.newSudoku.length).toInt())
         .toList();
-    print(sqrt(sudokuGenerator.newSudoku.length).toInt());
     partition(sudokuGenerator.newSudoku,
             sqrt(sudokuGenerator.newSudoku.length).toInt())
         .toList()
@@ -215,8 +228,6 @@ class _GameTable extends State<GameTable> {
         .entries
         .forEach(
       (entry) {
-        print(completes);
-        print("Entry String: $entry");
         List<int> tempListCompletes =
             completes[entry.key].expand((element) => element).toList();
         List<int> tempList = entry.value.expand((element) => element).toList();

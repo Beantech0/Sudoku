@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 Widget buttonPushNamed(String buttonText, context, String navigateTo) {
   var emptyBlockNumber = difficultyList.keys.firstWhere((element) => difficultyList[element] == buttonText, orElse: () => 2);
+  var difficulty = buttonText;
   return SizedBox(
                   height: 48,
                   width: double.infinity,
@@ -22,7 +23,7 @@ Widget buttonPushNamed(String buttonText, context, String navigateTo) {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
-                      onPressed: () {Navigator.pushNamed(context, navigateTo, arguments: emptyBlockNumber);
+                      onPressed: () {Navigator.pushNamed(context, navigateTo, arguments: {emptyBlockNumber: emptyBlockNumber, difficulty: buttonText});
                       },
                       child: Text(buttonText),
                     ),

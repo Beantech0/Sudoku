@@ -26,7 +26,7 @@ Future<void> main() async {
   bool isDarkMode = sharedPreferences.getBool('darkMode') ?? true;
   sharedPreferences.setBool('IS_LOGGED_IN', false);
   sharedPreferences.setString('loggedUser', '');
-  sharedPreferences.setInt('loggedUserID', 0);
+  sharedPreferences.setString('loggedUserID', '');
   // final bool? isLoggedIn = sharedPreferences.getBool('IS_LOGGED_IN');
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       setWindowTitle('Sudoku');
@@ -54,6 +54,7 @@ class SudokuApp extends StatelessWidget {
         '/MainMenu': (context) => const MainMenu(),
         '/GameTable': (context) => const GameTable(
               difficultyLevel: null,
+              difficulty: null,
             ),
         '/Settings': (context) => const Settings(),
         '/GameDifficulty': (context) => const GameDifficulty(),
