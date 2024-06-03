@@ -31,10 +31,11 @@ class DatabaseHelper {
 
     // create path to store the database
     final io.Directory appDirectory = await getApplicationDocumentsDirectory();
-    String dbPath = p.join(appDirectory.path, 'databases', 'sudoku_database.db');
+    String dbPath =
+        p.join(appDirectory.path, 'databases', 'sudoku_database.db');
 
     final dbFactory = databaseFactoryFfi;
-
+    // dbFactory.deleteDatabase(dbPath); //Debug
     // Open the database and return the reference
     return await dbFactory.openDatabase(
       dbPath,
@@ -57,7 +58,9 @@ class DatabaseHelper {
         password TEXT NOT NULL
       )
     ''');
-    
+
+    // db.execute("DROP TABLE history");
+
     // 'history' tábla létrehozása
     await db.execute('''
       CREATE TABLE IF NOT EXISTS history (
@@ -65,15 +68,14 @@ class DatabaseHelper {
         userid INTEGER NOT NULL,
         start_time TEXT NOT NULL,
         end_time TEXT NULL,
-        isFinished INTEGER NOT NULL,
+        is_finished INTEGER NOT NULL,
         difficulty TEXT NOT NULL
       )
     ''');
   }
 
   Future<int> createUser(
-      {required String username,
-      required String password}) async {
+      {required String username, required String password}) async {
     Database db = await instance.database;
 
     return await db.insert(
@@ -86,21 +88,36 @@ class DatabaseHelper {
     );
   }
 
-    Future<int> createHistory(
-      {
-        required Int userid,
-        required String startTime,
-        required String difficulty }) async {
+  Future<int> createHistory(
+      {required int userid,
+      required String startTime,
+      required String difficulty,
+      required int isFinished}) async {
     Database db = await instance.database;
 
-    return await db.insert(
+    int id = await db.insert(
       'history',
       <String, Object?>{
         'userid': userid,
         'start_time': startTime,
-        'difficulty': difficulty
+        'difficulty': difficulty,
+        'is_finished': isFinished
       },
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      // conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    return id;
+  }
+
+  Future<List<Map<String, Object?>>> getHistory({
+    required int userid,
+  }) async {
+    final db = await DatabaseHelper.instance.database;
+
+    // query the database for the user
+    return await db.query(
+      'history',
+      where: 'userid = ?',
+      whereArgs: [userid],
     );
   }
 
@@ -120,12 +137,13 @@ class DatabaseHelper {
       ],
     );
   }
-  
+
   Future<int> checkUser({
     required String username,
   }) async {
     final db = await DatabaseHelper.instance.database;
-    var result = await db.rawQuery('SELECT COUNT(*) FROM users WHERE username > ?', [username]);
+    var result = await db
+        .rawQuery('SELECT COUNT(*) FROM users WHERE username > ?', [username]);
     int count = result.first['COUNT(*)'] as int;
     return count;
   }

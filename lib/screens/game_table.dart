@@ -20,39 +20,44 @@ class GameTable extends StatefulWidget {
 
 class _GameTable extends State<GameTable> {
   // late final int difficultyLevel =ModalRoute.of(context)!.settings.arguments['difficultyLevel'] as int;
-  late final arguments = (ModalRoute.of(context)!.settings.arguments ?? <String, dynamic>{}) as Map;
-  late final int difficultyLevel = arguments['difficultyLevel'].ToInt();
-  late String difficulty = difficulty;
+  
   List<InnerBox> innerBoxes = [];
   FocusClass focusClass = FocusClass();
   bool isFinish = false;
   String? tapBoxIndex;
 
-    // Future<void> _saveHistory(loggedUserID, difficulty) async {  
-    //       int result = await DatabaseHelper.instance
-    //     .createHistory(userid: loggedUserID, startTime: ,difficulty: );
-    // }
+    Future _saveHistory(loggedUserID, startTime, difficulty, isFinished) async {  
+        int id = await DatabaseHelper.instance
+        // .createHistory(userid: int.parse(loggedUserID), startTime: startTime, difficulty: difficulty);
+        .createHistory(userid: int.parse(loggedUserID), startTime: startTime, difficulty: difficulty, isFinished: isFinished );
+         sharedPreferences.setInt('lastHistoryID', id);
+    }
 
   // Az oldal létrejötténél fut le.
   @override
   void initState() {
-    String? loggedUserID = sharedPreferences.getString('loggedUserID') ?? "";
-    print(arguments);
-    print('Ez lefut még:');
-    // print('difficulty: $difficulty');
-    // _saveHistory(loggedUserID, );
     super.initState();
-    
   }
 
   //Az initState után fut le amikor már megkapjuk a context értékét és tudjuk hogy milyen a nehézségi fokozat.
   @override
   void didChangeDependencies() {
-    generateSudoku();
+    String? loggedUserID = sharedPreferences.getString('loggedUserID') ?? "";
+    DateTime currentDateTime = DateTime.now();
+    String currentTime = currentDateTime.toString();
+
+    late final arguments = (ModalRoute.of(context)!.settings.arguments ?? <String, dynamic>{}) as Map;
+    late final int difficultyLevel = arguments['emptyBlockNumber'];
+    late final String difficulty = arguments['difficulty'].toString();
+
+    if (loggedUserID != "") {
+      _saveHistory(loggedUserID, currentTime, difficulty, 0);
+    }
+    generateSudoku(difficultyLevel);
     super.didChangeDependencies();
   }
 
-  void generateSudoku() {
+  void generateSudoku(difficultyLevel) {
     isFinish = false;
     focusClass = FocusClass();
     tapBoxIndex = null;

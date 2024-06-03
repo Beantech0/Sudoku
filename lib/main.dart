@@ -20,6 +20,7 @@ Future<void> main() async {
 
   //local DB inicializálás
   await DatabaseHelper.instance.database;
+  
   // SharedPreferences instance létrehozása
   sharedPreferences = await SharedPreferences.getInstance();
 

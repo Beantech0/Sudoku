@@ -23,7 +23,7 @@ Widget buttonPushNamed(String buttonText, context, String navigateTo) {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
-                      onPressed: () {Navigator.pushNamed(context, navigateTo, arguments: {emptyBlockNumber: emptyBlockNumber, difficulty: buttonText});
+                      onPressed: () {Navigator.pushNamed(context, navigateTo, arguments: {'emptyBlockNumber': emptyBlockNumber, 'difficulty': buttonText});
                       },
                       child: Text(buttonText),
                     ),

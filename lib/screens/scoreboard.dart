@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sudoku/db/db_helper.dart';
 import 'package:sudoku/main.dart';
 import 'package:sudoku/widgets/buttons.dart';
 import 'package:sudoku/widgets/images.dart';
@@ -11,9 +12,18 @@ class Scoreboard extends StatefulWidget {
   State<Scoreboard> createState() => _ScoreboardState();
 }
 
+  Future _getHistory() async {
+  String loggedUserID = sharedPreferences.getString('loggedUserID') ?? "";
+  final history = await DatabaseHelper.instance
+        .getHistory(userid: int.parse(loggedUserID));
+  print(history);
+  return history;
+  }
+
 class _ScoreboardState extends State<Scoreboard> {
   String? loggedUser = sharedPreferences.getString('loggedUser') ?? "";
-
+  final history = _getHistory();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
