@@ -27,6 +27,7 @@ class _GameTable extends State<GameTable> {
   String? tapBoxIndex;
 
     Future _saveHistory(loggedUserID, startTime, difficulty, isFinished) async {  
+        print(difficulty);
         int id = await DatabaseHelper.instance
         // .createHistory(userid: int.parse(loggedUserID), startTime: startTime, difficulty: difficulty);
         .createHistory(userid: int.parse(loggedUserID), startTime: startTime, difficulty: difficulty, isFinished: isFinished );

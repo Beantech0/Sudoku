@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:sudoku/db/db_helper.dart';
 import 'package:sudoku/main.dart';
@@ -11,16 +13,26 @@ class Scoreboard extends StatefulWidget {
   State<Scoreboard> createState() => _ScoreboardState();
 }
 
-Future<List<Map<String, dynamic>>> _getHistory() async {
+  Future<Map<String, int>> _getHistory() async {
   String loggedUserID = sharedPreferences.getString('loggedUserID') ?? "";
+  final Map<String, int> historyList = {
+        'Test': 0,
+        'Easy': 0,
+        'Medium': 0,
+        'Hard': 0,
+      };
   final history =
       await DatabaseHelper.instance.getHistory(userid: int.parse(loggedUserID));
-  return history;
+
+      for (var element in history) {
+        historyList.update(element['difficulty'].toString(), (value) => int.parse(element['count'].toString()));
+      }
+  return historyList;
 }
 
 class _ScoreboardState extends State<Scoreboard> {
   String? loggedUser = sharedPreferences.getString('loggedUser') ?? "";
-  Future<List<Map<String, dynamic>>> history = _getHistory();
+  final history = _getHistory();
 
   @override
   void initState() {
@@ -31,7 +43,7 @@ class _ScoreboardState extends State<Scoreboard> {
   Future<void> _loadHistory() async {
     final loadedHistory = await _getHistory();
     setState(() {
-      history = loadedHistory as Future<List<Map<String, dynamic>>>;
+      final history = loadedHistory;
     });
   }
 
@@ -51,24 +63,24 @@ class _ScoreboardState extends State<Scoreboard> {
               children: [
                 Text(
                   'Szia, $loggedUser',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Container(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.green),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: FutureBuilder<List<Map<String, dynamic>>>(
+                  child: FutureBuilder<Map<String, int>>(
                     future: _getHistory(),
                     builder: (BuildContext context,
-                        AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+                        AsyncSnapshot<Map<String, int>> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return const CircularProgressIndicator();
                       } else if (snapshot.hasError) {
                         return Text('Hiba történt: ${snapshot.error}');
                       } else {
@@ -76,22 +88,25 @@ class _ScoreboardState extends State<Scoreboard> {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text(
-                              'Play Count: ',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            Text('${history.length}'),
-                            Text(
-                              'Hard: ',
+                             Text(
+                              'Total Played Count: ${history['Test']! + history['Easy']! + history['Medium']! + history['Hard']!}',
                               style: TextStyle(fontSize: 20),
                             ),
                             Text(
-                              'Medium: ',
+                              'Test: ${history['Test']}',
                               style: TextStyle(fontSize: 20),
                             ),
                             Text(
-                              'Easy: ',
-                              style: TextStyle(fontSize: 20),
+                              'Easy: ${history['Easy']}',
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                            Text(
+                              'Medium: ${history['Medium']}',
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                            Text(
+                              'Hard: ${history['Hard']}',
+                              style: const TextStyle(fontSize: 20),
                             ),
                           ],
                         );

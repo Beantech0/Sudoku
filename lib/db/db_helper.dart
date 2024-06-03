@@ -114,11 +114,12 @@ class DatabaseHelper {
     final db = await DatabaseHelper.instance.database;
 
     // query the database for the user
-    return await db.query(
-      'history',
-      where: 'userid = ?',
-      whereArgs: [userid],
-    );
+    return await db.rawQuery('SELECT difficulty, COUNT(userid) AS count FROM history WHERE userid=? GROUP BY difficulty', [userid]);
+    // return await db.query(
+    //   'history',
+    //   where: 'userid = ?',
+    //   whereArgs: [userid],
+    // );
   }
 
   Future<List<Map<String, Object?>>> loginUser({
