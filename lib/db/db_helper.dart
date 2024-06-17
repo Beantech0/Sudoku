@@ -144,7 +144,7 @@ class DatabaseHelper {
   }) async {
     final db = await DatabaseHelper.instance.database;
     var result = await db
-        .rawQuery('SELECT COUNT(*) FROM users WHERE username > ?', [username]);
+        .rawQuery('SELECT COUNT(*) FROM users WHERE username = ?', [username]);
     int count = result.first['COUNT(*)'] as int;
     return count;
   }
